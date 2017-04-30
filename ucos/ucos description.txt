@@ -31,3 +31,6 @@ ucos是通过任务控制块来管理任务的，任务控制块是一个基于链表的数据结构，任务控制块
 /OSTCBPrio:任务优先级变量，变量值越小，任务优先级越高
 OSTCBX/OSTCBY/OSTCBBitX/OSTCBBitY
 
+
+
+ucos最小内核定义了4个指针，一个数组和一个指针数组。 
