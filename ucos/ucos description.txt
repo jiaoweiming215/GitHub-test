@@ -34,3 +34,15 @@ OSTCBX/OSTCBY/OSTCBBitX/OSTCBBitY
 
 
 ucos最小内核定义了4个指针，一个数组和一个指针数组。 
+OSTCBCur:指向 当前任务控制块的指针
+OSTCBFreeList:空任务控制块 链表的表头指针
+OSTCBHighRdy：指向 将要运行最高优先级任务控制块的指针
+OSTCBList：已使用任务控制块链表的表头指针
+
+OSTCBPriTbl[]：任务控制块优先级表，专门用来存放指向各任务控制块的指针，并按照任务优先级将这些指针存放在数组的各个元素里。
+
+OSTCBTbl[]：任务控制块数组，所有的任务控制块都保存在这个数组中。
+
+
+
+
