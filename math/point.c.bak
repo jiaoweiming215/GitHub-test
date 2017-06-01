@@ -1,0 +1,24 @@
+/******************************************************/
+输入a/b/c个整数，按大小顺序输出
+/******************************************************/
+
+#include <stdio.h>
+int swapValue(int *a;int *b; int *c);
+int swapValue(int *a;int *b; int *c)
+{
+		
+}
+
+main()
+{
+	int a,b,c;
+	int *p1,*p2,*p3;
+	scanf("%d,%d,%d",&a,&b,&c);
+	p1 = &a;
+	p2 = &b;
+	p3 = &c;
+	
+	swapValue
+
+
+}
