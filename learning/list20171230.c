@@ -7,17 +7,21 @@ typedef struct ListNode
    int iData;
    struct ListNode *pNext;
 }LISTNODE_T;
+#define LEN sizeof(LISTNODE_T)
 /*新增节点*/
 void AddNodeToTail(LISTNODE_T** pHead,LISTNODE_T *pNode)
 {
-    if(*pHead == NULL)
+    LISTNODE_T *ptTmp;
+	ptTmp = (LISTNODE_T *)malloc(LEN);
+	if(*pHead == NULL)
     {
         *pHead = pNode;
+		ptTmp = *pHead;
 		pNode->pNext = NULL;
 	}
 	else
 	{
-       LISTNODE_T *ptTmp = *pHead;
+       ptTmp = *pHead;
 	   while(ptTmp->pNext!=NULL)
 	   {
         ptTmp = ptTmp->pNext;
