@@ -1,7 +1,11 @@
 /*****************************************************************************
 *功能描述:	链表新增节点
+链表删除节点
+查找节点
  ******************************************************************************/
 //#include "ListApp.h"
+#define TRUE 1
+#define FALSE 0
 typedef struct ListNode
 {
    int iData;
@@ -9,10 +13,14 @@ typedef struct ListNode
 }LISTNODE_T;
 #define LEN sizeof(LISTNODE_T)
 /*新增节点*/
-void AddNodeToTail(LISTNODE_T** pHead,LISTNODE_T *pNode)
+int AddNodeToTail(LISTNODE_T** pHead,LISTNODE_T *pNode)
 {
     LISTNODE_T *ptTmp;
 	ptTmp = (LISTNODE_T *)malloc(LEN);
+	if(ptTmp == NULL)
+	{
+        return FALSE;
+	}
 	if(*pHead == NULL)
     {
         *pHead = pNode;
@@ -29,8 +37,37 @@ void AddNodeToTail(LISTNODE_T** pHead,LISTNODE_T *pNode)
 	   ptTmp->pNext = pNode;
 	   pNode->pNext = NULL;
 	}
+	return TRUE;
 }
 
+/*void del(LISTNODE_T** pHead,int iData)
+{
+   LISTNODE_T *ptTmp;
+   
+   
+}*/
+
+int GetElem(LISTNODE_T **pHead,int iData)
+{
+    LISTNODE_T *ptElm;
+	ptElm = *pHead;
+	if(ptElm == NULL)
+	{
+        printf("the list is NULL");
+		return FALSE;
+	}
+	while(ptElm!=NULL)
+	{
+        if(ptElm->iData == iData)
+       	{
+            printf("%d is in the list",iData);
+			return TRUE;
+		}
+		ptElm = ptElm->pNext;
+	}
+    printf("%d is not in the list",iData);
+	return FALSE;
+}
 void main()
 {
     LISTNODE_T *ptHead,*ptTmp;
@@ -54,6 +91,9 @@ void main()
         printf("%d",ptTmp->iData);
 		ptTmp = ptTmp->pNext;
 	}
+	GetElem(&ptHead,2);
+	GetElem(&ptHead,5);
+	return TRUE;
 }
 
 
