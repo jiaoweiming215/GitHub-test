@@ -19,21 +19,21 @@ LISTNODE_T *AddNodeToTail(LISTNODE_T** pHead,int iData)
     LISTNODE_T *ptTmp,*ptElm,*ptHead;
     ptHead = *pHead;
     ptTmp = (LISTNODE_T *)malloc(LEN);
-    if(ptTmp == NULL)
+    if(NULL == ptTmp)
     {
         printf("It's out of memory");
         return ptHead;
     }
     ptTmp->iData = iData;
     ptTmp->pNext = NULL;
-    if(*pHead == NULL)
+    if(NULL == ptHead)
     {
-        *pHead = ptTmp;
+        ptHead = ptTmp;
     }
     else
     {
        ptElm = *pHead;
-       while(ptElm->pNext!=NULL)
+       while(NULL != ptElm->pNext)
        {
         ptElm = ptElm->pNext;
        }
@@ -44,47 +44,47 @@ LISTNODE_T *AddNodeToTail(LISTNODE_T** pHead,int iData)
 /*删除节点*/
 LISTNODE_T *DelNode(LISTNODE_T** pHead,int iData)
 {
-    LISTNODE_T *ptTmp,*ptTmp1,*ptHead;
-    ptHead = *pHead;
-    ptTmp = *pHead;
-    if(ptHead == NULL)
-    {
-        printf("\nlist null\n");
+     LISTNODE_T *ptTmp,*ptTmp1,*ptHead;
+     ptHead = *pHead;
+     ptTmp = *pHead;
+     if(NULL == ptHead)
+     {
+         printf("\nlist null\n");
+     }
+     else
+     {
+         if(iData == ptTmp->iData)
+         {
+             ptHead = ptHead->pNext;
+             free(ptTmp);
+         }
+         while((iData != ptTmp->iData)&&(NULL != ptTmp))
+         {
+             ptTmp1 = ptTmp;
+             ptTmp = ptTmp->pNext;
+         }
+         if((iData == ptTmp->iData)&&(NULL != ptTmp))
+         {
+             ptTmp1 = ptTmp->pNext;
+             free(ptTmp);
+         }
     }
-    else
-    {
-        if(iData ==ptTmp->iData)
-        {
-            ptHead = ptHead->pNext;
-            free(ptTmp);
-        }
-        while((iData != ptTmp->iData)&&(ptTmp!= NULL))
-        {
-            ptTmp1 = ptTmp;
-            ptTmp = ptTmp->pNext;
-        }
-        if((iData == ptTmp->iData)&&(ptTmp->pNext != NULL))
-        {
-            ptTmp1 = ptTmp->pNext;
-            free(ptTmp);
-        }
-   }
-   return ptHead;
+    return ptHead;
 }
 /*查找节点*/
 int GetElem(LISTNODE_T **pHead,int iData)
 {
     LISTNODE_T *ptElm;
     ptElm = *pHead;
-    if(ptElm == NULL)
+    if(NULL == ptElm)
     {
         printf("the list is NULL");
         return FALSE;
     }
-    while(ptElm!=NULL)
+    while(NULL != ptElm)
     {
-        if(ptElm->iData == iData)
-           {
+        if(iData == ptElm->iData)
+        {
             printf("%d is in the list",iData);
             return TRUE;
         }
@@ -98,14 +98,14 @@ int InsertNode(LISTNODE_T **pHead,int iData)
 {
     LISTNODE_T *ptElm,*ptTmp;
     ptTmp = (LISTNODE_T *)malloc(LEN);
-    if(ptTmp == NULL)
+    if(NULL == ptTmp)
     {
         printf("It's out of memory");
         return FALSE;
     }    
     ptTmp->iData = iData;
     ptTmp->pNext = NULL;
-    if(*pHead == NULL)
+    if(NULL == *pHead)
     { 
         *pHead = ptElm;
         return TRUE;
@@ -113,7 +113,7 @@ int InsertNode(LISTNODE_T **pHead,int iData)
     else
     {
         ptElm = *pHead;
-        while(ptElm->pNext!=NULL)
+        while(NULL != ptElm->pNext)
         {
             ptElm = ptElm->pNext;
         }
@@ -129,7 +129,7 @@ void main()
     ptHead = AddNodeToTail(&ptHead,1);
 
     ptTmp = ptHead;
-    while(ptTmp!=NULL)
+    while(NULL != ptTmp)
     {
         printf("%d\n",ptTmp->iData);
         ptTmp = ptTmp->pNext;
@@ -137,7 +137,7 @@ void main()
     ptHead = AddNodeToTail(&ptHead,2);
     ptHead = AddNodeToTail(&ptHead,3);
     ptTmp = ptHead;
-    while(ptTmp!=NULL)
+    while(NULL != ptTmp)
     {
         printf("%d\n",ptTmp->iData);
         ptTmp = ptTmp->pNext;
