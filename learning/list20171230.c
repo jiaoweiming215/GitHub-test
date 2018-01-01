@@ -1,8 +1,13 @@
 /*****************************************************************************
-*功能描述:    链表新增节点
-删除节点
-查找节点
-插入节点
+* File       : ListApp.c
+* Function   : The listapp can add node,delete node, search node and insert node
+* description: To be done.           
+* Version    : V0.10
+* Author     : JOE
+* Date       : 2nd Jan 2018
+* History    :  No.  When           Who           What
+*                   1    2/Jan/2016     JOE           Create
+
  ******************************************************************************/
 #define TRUE 1
 #define FALSE 0
@@ -12,7 +17,21 @@ typedef struct ListNode
    struct ListNode *pNext;
 }LISTNODE_T;
 #define LEN sizeof(LISTNODE_T)
-/*新增节点*/
+/********************************************************
+* Name       : LISTNODE_T *AddNodeToTail(LISTNODE_T **pHead,int iData)
+* Function   : Add node to tail
+* Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
+                   int iData 0~255   Data for add
+
+* Output:    : None
+* Return     : NULL   Failed operation
+*            : ptTmp  Sucess operation
+*              0x00000001~0xffffffff   Node add sucess.
+* description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 2nd Jan 2018
+*********************************************************/
 LISTNODE_T *AddNodeToTail(LISTNODE_T **pHead,int iData)
 {
     LISTNODE_T *ptTmp,*ptElm;
@@ -39,7 +58,21 @@ LISTNODE_T *AddNodeToTail(LISTNODE_T **pHead,int iData)
     }
     return ptTmp;
 }
-/*删除节点*/
+/********************************************************
+* Name       : LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
+* Function   : Delete node from tail
+* Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
+                   int iData 0~255   Data for add
+
+* Output:    : None
+* Return     :  ptTmp  Sucess operation
+*              0x00000001~0xffffffff   Node del sucess.
+* description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 2nd Jan 2018
+*********************************************************/
+
 LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
 {
      LISTNODE_T *ptTmp,*ptTmp1,*ptHead;
@@ -54,6 +87,7 @@ LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
          if(iData == ptTmp->iData)
          {
              ptHead = ptHead->pNext;
+             *pHead = ptHead;
              free(ptTmp);
          }
          while((iData != ptTmp->iData)&&(NULL != ptTmp))
@@ -69,7 +103,20 @@ LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
     }
     return ptHead;
 }
-/*查找节点*/
+/********************************************************
+* Name       : int GetElem(LISTNODE_T **pHead,int iData)
+* Function   : find node from tail
+* Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
+                   int iData 0~255   Data for add
+
+* Output:    : None
+* Return     : FALSE   Failed operation
+*            : TRUE  Sucess operation
+* description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 2nd Jan 2018
+*********************************************************/
 int GetElem(LISTNODE_T **pHead,int iData)
 {
     LISTNODE_T *ptElm;
@@ -91,7 +138,21 @@ int GetElem(LISTNODE_T **pHead,int iData)
     printf("%d is not in the list",iData);
     return FALSE;
 }
-/*插入节点*/
+/********************************************************
+* Name       : LISTNODE_T *InsertNode(LISTNODE_T **pHead,int iData)
+* Function   : Add node to tail
+* Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
+                   int iData 0~255   Data for add
+
+* Output:    : None
+* Return     : NULL   Failed operation
+*            : ptTmp  Sucess operation
+*              0x00000001~0xffffffff   Node add sucess.
+* description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 2nd Jan 2018
+*********************************************************/
 LISTNODE_T *InsertNode(LISTNODE_T **pHead,int iData)
 {
     LISTNODE_T *ptElm,*ptTmp;
@@ -118,6 +179,7 @@ LISTNODE_T *InsertNode(LISTNODE_T **pHead,int iData)
     }
     return ptTmp;
 }
+
 void main()
 {
     LISTNODE_T *ptHead,*ptTmp,*ptNode;
