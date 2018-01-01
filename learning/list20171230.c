@@ -1,7 +1,7 @@
 /*****************************************************************************
 *功能描述:	链表新增节点
-链表删除节点
 查找节点
+插入节点
  ******************************************************************************/
 //#include "ListApp.h"
 #define TRUE 1
@@ -16,13 +16,13 @@ typedef struct ListNode
 int AddNodeToTail(LISTNODE_T** pHead,LISTNODE_T *pNode)
 {
     LISTNODE_T *ptTmp;
-	ptTmp = (LISTNODE_T *)malloc(LEN);
-	if(ptTmp == NULL)
-	{
-        return FALSE;
-	}
 	if(*pHead == NULL)
     {
+		ptTmp = (LISTNODE_T *)malloc(LEN);
+		if(ptTmp == NULL)
+		{
+			return FALSE;
+		}
         *pHead = pNode;
 		ptTmp = *pHead;
 		pNode->pNext = NULL;
@@ -33,6 +33,11 @@ int AddNodeToTail(LISTNODE_T** pHead,LISTNODE_T *pNode)
 	   while(ptTmp->pNext!=NULL)
 	   {
         ptTmp = ptTmp->pNext;
+	   }
+	   ptTmp = (LISTNODE_T *)malloc(LEN);
+	   if(ptTmp == NULL)
+	   {
+		   return FALSE;
 	   }
 	   ptTmp->pNext = pNode;
 	   pNode->pNext = NULL;
@@ -68,6 +73,34 @@ int GetElem(LISTNODE_T **pHead,int iData)
     printf("%d is not in the list",iData);
 	return FALSE;
 }
+
+int InsertNode(LISTNODE_T **pHead,int iData)
+{
+    LISTNODE_T *ptElm,*ptTmp;
+    ptTmp = (LISTNODE_T *)malloc(LEN);
+	if(ptTmp == NULL)
+	{
+		printf("It's out of memory");
+		return FALSE;
+	}	
+	ptTmp->iData = iData;
+	ptTmp->pNext = NULL;
+	if(*pHead == NULL)
+	{ 
+	    *pHead = ptElm;
+	    return TRUE;
+	}
+	else
+	{
+        ptElm = *pHead;
+	    while(ptElm->pNext!=NULL)
+        {
+            ptElm = ptElm->pNext;
+		}
+		ptElm->pNext = ptTmp;
+		return TRUE;
+	}
+}
 void main()
 {
     LISTNODE_T *ptHead,*ptTmp;
@@ -92,6 +125,8 @@ void main()
 		ptTmp = ptTmp->pNext;
 	}
 	GetElem(&ptHead,2);
+	GetElem(&ptHead,5);
+	InsertNode(&ptHead,5);
 	GetElem(&ptHead,5);
 	return TRUE;
 }
