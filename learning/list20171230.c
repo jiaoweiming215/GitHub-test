@@ -13,44 +13,63 @@ typedef struct ListNode
 }LISTNODE_T;
 #define LEN sizeof(LISTNODE_T)
 /*新增节点*/
-int AddNodeToTail(LISTNODE_T** pHead,LISTNODE_T *pNode)
+LISTNODE_T *AddNodeToTail(LISTNODE_T** pHead,int iData)
 {
-    LISTNODE_T *ptTmp;
+    LISTNODE_T *ptTmp,*ptElm,*ptHead;
+	ptHead = *pHead;
+	ptTmp = (LISTNODE_T *)malloc(LEN);
+	if(ptTmp == NULL)
+	{
+		printf("It's out of memory");
+		return ptHead;
+	}
+	ptTmp->iData = iData;
+	ptTmp->pNext = NULL;
 	if(*pHead == NULL)
     {
-		ptTmp = (LISTNODE_T *)malloc(LEN);
-		if(ptTmp == NULL)
-		{
-			return FALSE;
-		}
-        *pHead = pNode;
-		ptTmp = *pHead;
-		pNode->pNext = NULL;
+        *pHead = ptTmp;
 	}
 	else
 	{
-       ptTmp = *pHead;
-	   while(ptTmp->pNext!=NULL)
+       ptElm = *pHead;
+	   while(ptElm->pNext!=NULL)
 	   {
-        ptTmp = ptTmp->pNext;
+        ptElm = ptElm->pNext;
 	   }
-	   ptTmp = (LISTNODE_T *)malloc(LEN);
-	   if(ptTmp == NULL)
-	   {
-		   return FALSE;
-	   }
-	   ptTmp->pNext = pNode;
-	   pNode->pNext = NULL;
+	   ptElm->pNext = ptTmp;
 	}
-	return TRUE;
+	return ptHead;
 }
 
-/*void del(LISTNODE_T** pHead,int iData)
+LISTNODE_T *DelNode(LISTNODE_T** pHead,int iData)
 {
-   LISTNODE_T *ptTmp;
-   
-   
-}*/
+    LISTNODE_T *ptTmp,*ptTmp1,*ptHead;
+    ptHead = *pHead;
+	ptTmp = *pHead;
+    if(ptHead == NULL)
+    {
+        printf("\nlist null\n");
+    }
+    else
+    {
+		if(iData ==ptTmp->iData)
+		{
+		    ptHead = ptHead->pNext;
+		    free(ptTmp);
+		}
+		while((iData != ptTmp->iData)&&(ptTmp!= NULL))
+		{
+			ptTmp1 = ptTmp;
+		    ptTmp = ptTmp->pNext;
+		}
+		if((iData == ptTmp->iData)&&(ptTmp->pNext != NULL))
+        {
+            ptTmp1 = ptTmp->pNext;
+			free(ptTmp);
+        }
+   }
+   return ptHead;
+}
 
 int GetElem(LISTNODE_T **pHead,int iData)
 {
@@ -104,29 +123,29 @@ int InsertNode(LISTNODE_T **pHead,int iData)
 void main()
 {
     LISTNODE_T *ptHead,*ptTmp;
-	LISTNODE_T tNode1,tNode2;
 	ptHead = NULL;
-	tNode1.iData = 1; 
-	AddNodeToTail(&ptHead,&tNode1);
+	
+	ptHead = AddNodeToTail(&ptHead,1);
 
     ptTmp = ptHead;
     while(ptTmp!=NULL)
     {
-        printf("%d",ptTmp->iData);
+        printf("%d\n",ptTmp->iData);
 		ptTmp = ptTmp->pNext;
 	}
-	tNode2.iData = 2; 
-	AddNodeToTail(&ptHead,&tNode2);
-
+	ptHead = AddNodeToTail(&ptHead,2);
+	ptHead = AddNodeToTail(&ptHead,3);
     ptTmp = ptHead;
     while(ptTmp!=NULL)
     {
-        printf("%d",ptTmp->iData);
+        printf("%d\n",ptTmp->iData);
 		ptTmp = ptTmp->pNext;
 	}
 	GetElem(&ptHead,2);
 	GetElem(&ptHead,5);
 	InsertNode(&ptHead,5);
+	GetElem(&ptHead,5);
+	ptHead = DelNode(&ptHead,5);
 	GetElem(&ptHead,5);
 	return TRUE;
 }
