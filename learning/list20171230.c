@@ -23,7 +23,7 @@ typedef struct ListNode
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
                    int iData 1~255   Data for add
 
-* Output:    : pHead 0x00000000~0xffffffff 
+* Output:    : pHead The head of the list 0x00000000~0xffffffff   
 * Return     : NULL   Failed operation
 *            : Other  Sucess operation
 * Description: To be done
@@ -58,12 +58,12 @@ LISTNODE_T *AddNodeToTail(LISTNODE_T **pHead,int iData)
     return ptTmp;
 }
 /********************************************************
-* Name       : LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
+* Name       : int DelNode(LISTNODE_T **pHead,int iData)
 * Function   : Delete node from list
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
                    int iData 1~255   Data for add
 
-* Output:    : None
+* Output:    : pHead The head of the list 0x00000000~0xffffffff   
 * Return     :  FALSE Node del fail
 *              TRUE  Node del sucess.
 * Description: To be done
@@ -72,7 +72,7 @@ LISTNODE_T *AddNodeToTail(LISTNODE_T **pHead,int iData)
 * Date       : 2nd Jan 2018
 *********************************************************/
 
-LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
+int DelNode(LISTNODE_T **pHead,int iData)
 {
      LISTNODE_T *ptTmp,*ptTmp1,*ptHead;
      ptHead = *pHead;
@@ -149,10 +149,10 @@ int GetElem(LISTNODE_T **pHead,int iData)
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
                    int iData 1~255   Data for add
 
-* Output:    : pHead The head of the list 0x00000004~0xffffffff   
+* Output:    : pHead The head of the list 0x00000000~0xffffffff   
 * Return     : NULL   Failed operation
 *            : Other  Sucess operation
-*              0x00000001~0xffffffff   Node insert sucess.
+*              0x00000004~0xffffffff   Node insert sucess.
 * Description: To be done
 * Version    : V0.10
 * Author     : JOE
@@ -202,6 +202,7 @@ LISTNODE_T *InsertNode(LISTNODE_T **pHead,int iData)
 
 int main()
 {
+    int iTmp;
     LISTNODE_T *ptHead,*ptTmp,*ptNode;
     ptHead = NULL;
     
@@ -225,7 +226,7 @@ int main()
     GetElem(&ptHead,5);
     ptNode = InsertNode(&ptHead,5);
     GetElem(&ptHead,5);
-    ptHead = DelNode(&ptHead,5);
+    iTmp = DelNode(&ptHead,5);
     GetElem(&ptHead,5);
     return TRUE;
 }
