@@ -1,12 +1,12 @@
 /*****************************************************************************
 * File       : ListApp.c
 * Function   : The listapp can add node,delete node, search node and insert node
-* description: To be done.           
+* Description: To be done.           
 * Version    : V0.10
 * Author     : JOE
 * Date       : 2nd Jan 2018
 * History    :  No.  When           Who           What
-*                   1    2/Jan/2016     JOE           Create
+*                   1    2/Jan/2018     JOE           Create
 
  ******************************************************************************/
 #define TRUE 1
@@ -21,13 +21,12 @@ typedef struct ListNode
 * Name       : LISTNODE_T *AddNodeToTail(LISTNODE_T **pHead,int iData)
 * Function   : Add node to tail
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-                   int iData 0~255   Data for add
+                   int iData 1~255   Data for add
 
-* Output:    : None
+* Output:    : pHead 0x00000000~0xffffffff 
 * Return     : NULL   Failed operation
-*            : ptTmp  Sucess operation
-*              0x00000001~0xffffffff   Node add sucess.
-* description: To be done
+*            : Other  Sucess operation
+* Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 2nd Jan 2018
@@ -60,14 +59,14 @@ LISTNODE_T *AddNodeToTail(LISTNODE_T **pHead,int iData)
 }
 /********************************************************
 * Name       : LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
-* Function   : Delete node from tail
+* Function   : Delete node from list
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-                   int iData 0~255   Data for add
+                   int iData 1~255   Data for add
 
 * Output:    : None
-* Return     :  ptTmp  Sucess operation
-*              0x00000001~0xffffffff   Node del sucess.
-* description: To be done
+* Return     :  FALSE Node del fail
+*              TRUE  Node del sucess.
+* Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 2nd Jan 2018
@@ -81,6 +80,7 @@ LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
      if(NULL == ptHead)
      {
          printf("\nlist null\n");
+        return FALSE;
      }
      else
      {
@@ -90,29 +90,34 @@ LISTNODE_T *DelNode(LISTNODE_T **pHead,int iData)
              *pHead = ptHead;
              free(ptTmp);
          }
-         while((iData != ptTmp->iData)&&(NULL != ptTmp))
-         {
-             ptTmp1 = ptTmp;
-             ptTmp = ptTmp->pNext;
-         }
-         if((iData == ptTmp->iData)&&(NULL != ptTmp))
-         {
-             ptTmp1 = ptTmp->pNext;
-             free(ptTmp);
-         }
+        else
+        {
+            while((iData != ptTmp->iData)&&(NULL != ptTmp))
+             {
+                 ptTmp1 = ptTmp;
+                 ptTmp = ptTmp->pNext;
+             }
+             if((iData == ptTmp->iData)&&(NULL != ptTmp))
+             {
+                 ptTmp1 = ptTmp->pNext;
+                 free(ptTmp);
+             }
+
+        }
+         
     }
-    return ptHead;
+    return TRUE;
 }
 /********************************************************
 * Name       : int GetElem(LISTNODE_T **pHead,int iData)
-* Function   : find node from tail
+* Function   : find node from list
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-                   int iData 0~255   Data for add
+                   int iData 1~255   Data for add
 
 * Output:    : None
 * Return     : FALSE   Failed operation
 *            : TRUE  Sucess operation
-* description: To be done
+* Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 2nd Jan 2018
@@ -140,15 +145,15 @@ int GetElem(LISTNODE_T **pHead,int iData)
 }
 /********************************************************
 * Name       : LISTNODE_T *InsertNode(LISTNODE_T **pHead,int iData)
-* Function   : Add node to tail
+* Function   : Insert node to list,put the big  behind small
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-                   int iData 0~255   Data for add
+                   int iData 1~255   Data for add
 
-* Output:    : None
+* Output:    : pHead The head of the list 0x00000004~0xffffffff   
 * Return     : NULL   Failed operation
-*            : ptTmp  Sucess operation
-*              0x00000001~0xffffffff   Node add sucess.
-* description: To be done
+*            : Other  Sucess operation
+*              0x00000001~0xffffffff   Node insert sucess.
+* Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 2nd Jan 2018
@@ -162,25 +167,40 @@ LISTNODE_T *InsertNode(LISTNODE_T **pHead,int iData)
         printf("It's out of memory");
         return NULL;
     }    
+    ptElm = *pHead;
     ptTmp->iData = iData;
     ptTmp->pNext = NULL;
     if(NULL == *pHead)
     { 
-        *pHead = ptElm;
+        *pHead = ptTmp;
     }
     else
     {
-        ptElm = *pHead;
-        while(NULL != ptElm->pNext)
+        while((NULL != ptElm->pNext)&&(ptTmp->iData > ptElm->iData))
         {
             ptElm = ptElm->pNext;
         }
-        ptElm->pNext = ptTmp;
+        if(ptTmp->iData <= ptElm->iData)
+        {
+            if(ptElm == *pHead)
+            {
+                *pHead = ptTmp;
+                ptTmp ->pNext =ptElm;
+            }
+            else if(NULL != ptElm->pNext)
+            {
+                ptTmp->pNext = ptElm;
+            }
+        }
+        else
+        {
+            ptElm->pNext = ptTmp;
+        }
     }
     return ptTmp;
 }
 
-void main()
+int main()
 {
     LISTNODE_T *ptHead,*ptTmp,*ptNode;
     ptHead = NULL;
