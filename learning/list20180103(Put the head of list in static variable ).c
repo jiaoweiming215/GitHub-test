@@ -101,11 +101,11 @@ int DelNode(int iData)
                  ptTmp1 = ptTmp;
                  ptTmp = ptTmp->pNext;
             }
-             if((iData == ptTmp->iData)&&(NULL != ptTmp))
-             {
+            if((iData == ptTmp->iData)&&(NULL != ptTmp))
+            {
                  ptTmp1 = ptTmp->pNext;
                  free(ptTmp);
-             }
+            }
 
         }
          
