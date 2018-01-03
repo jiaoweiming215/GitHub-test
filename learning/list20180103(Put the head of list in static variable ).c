@@ -80,7 +80,6 @@ int DelNode(int iData)
 {
      LISTNODE_T *ptTmp,*ptTmp1,*ptHead;
      ptHead = sg_ptHead;
-     ptTmp = sg_ptHead;
      if(NULL == sg_ptHead)
      {
          printf("\nlist null\n");
@@ -96,11 +95,12 @@ int DelNode(int iData)
          }
         else
         {
+            ptTmp = sg_ptHead->pNext;
             while((iData != ptTmp->iData)&&(NULL != ptTmp))
-             {
+            {
                  ptTmp1 = ptTmp;
                  ptTmp = ptTmp->pNext;
-             }
+            }
              if((iData == ptTmp->iData)&&(NULL != ptTmp))
              {
                  ptTmp1 = ptTmp->pNext;
