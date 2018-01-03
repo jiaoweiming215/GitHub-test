@@ -1,12 +1,12 @@
 /*****************************************************************************
-* File       : ListApp.c
-* Function   : The listapp can add node,delete node, search node and insert node
+* File       : circular linked list.c
+* Function   : The  file complete circular linked list,can add node,delete node, search node and insert node
 * Description: To be done.           
 * Version    : V0.10
 * Author     : JOE
-* Date       : 3rd Jan 2018
+* Date       : 4th Jan 2018
 * History    :  No.  When           Who           What
-*                  1    3/Jan/2018     JOE           Create
+*                  1    4/Jan/2018     JOE           Create
 
  ******************************************************************************/
 #define TRUE 1
@@ -18,14 +18,13 @@ typedef struct ListNode
    struct ListNode *pNext;
 }LISTNODE_T;
 
-static  LISTNODE_T *sg_ptHead = NULL;
-
+static LISTNODE_T *sg_ptHead = NULL;
+static LISTNODE_T sg_tNode;/*The node can't be deleted*/
 #define LEN sizeof(LISTNODE_T)
 /********************************************************
 * Name       : LISTNODE_T *AddNodeToTail(int iData)
-* Function   : Add node to tail
-* Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-                   int iData 1~255   Data for add
+* Function   :Add node to tail
+* Input      : int iData 1~255   Data for add
 
 * Output:    : sg_ptHead The head of the list 0x00000000~0xffffffff   
 * Return     : NULL   Failed operation
@@ -45,26 +44,20 @@ LISTNODE_T *AddNodeToTail(int iData)
         return NULL;
     }
     ptTmp->iData = iData;
-    ptTmp->pNext = NULL;
-    if(NULL == sg_ptHead)
+    ptTmp->pNext = sg_ptHead;
+    ptElm = sg_ptHead;
+    while(sg_ptHead != ptElm->pNext)
     {
-        sg_ptHead = ptTmp;
+        ptElm = ptElm->pNext;
     }
-    else
-    {
-       ptElm = sg_ptHead;
-       while(NULL != ptElm->pNext)
-       {
-           ptElm = ptElm->pNext;
-       }
-       ptElm->pNext = ptTmp;
-    }
+    ptElm->pNext = ptTmp;
     return ptTmp;
 }
 /********************************************************
 * Name       : int DelNode(int iData)
-* Function   : Delete all nodes from list which node's value is equal to idata.
-* Input      : int iData 1~255   Data for add
+* Function   : Delete a node from list which value is equal to idata 
+* Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
+                   int iData 1~255   Data for add
 
 * Output:    : sg_ptHead The head of the list 0x00000000~0xffffffff   
 * Return     :  FALSE Node del fail
@@ -77,38 +70,20 @@ LISTNODE_T *AddNodeToTail(int iData)
 
 int DelNode(int iData)
 {
-     LISTNODE_T *ptTmp,*ptTmp1;
-     ptTmp = sg_ptHead;
-     if(NULL == sg_ptHead)
-     {
-         printf("\nlist null\n");
-        return FALSE;
-     }
-     else
-     {
-         if(iData == ptTmp->iData)
-         {
-             sg_ptHead = ptTmp->pNext;
-             free(ptTmp);
-         }
-        else
-        {
-            ptTmp = sg_ptHead->pNext;
-            while(NULL != ptTmp)/*del all nodes which value is equal to idata*/
-            {
-                if(iData == ptTmp->iData)
-                {
-                    ptTmp1 = ptTmp->pNext;
-                    free(ptTmp);
-                    ptTmp = ptTmp1;
-                    continue;
-                }
-                ptTmp = ptTmp->pNext;
-            }
-
-        }
-         
+    LISTNODE_T *ptTmp,*ptTmp1;
+    ptTmp = sg_ptHead->pNext;
+    
+    while((iData != ptTmp->iData)&&(sg_ptHead != ptTmp))
+    {
+        ptTmp1 = ptTmp;
+        ptTmp = ptTmp->pNext;
     }
+    if((iData == ptTmp->iData)&&(sg_ptHead != ptTmp))
+    {
+        ptTmp1 = ptTmp->pNext;
+        free(ptTmp);
+    }
+    
     return TRUE;
 }
 /********************************************************
@@ -128,13 +103,8 @@ int DelNode(int iData)
 int GetElem(LISTNODE_T **pHead,int iData)
 {
     LISTNODE_T *ptElm;
-    ptElm = sg_ptHead;
-    if(NULL == ptElm)
-    {
-        printf("the list is NULL");
-        return FALSE;
-    }
-    while(NULL != ptElm)
+    ptElm = sg_ptHead->pNext;
+    while(sg_ptHead != ptElm)
     {
         if(iData == ptElm->iData)
         {
@@ -172,33 +142,26 @@ LISTNODE_T *InsertNode(int iData)
     }    
     ptElm = sg_ptHead;
     ptTmp->iData = iData;
-    ptTmp->pNext = NULL;
-    if(NULL == sg_ptHead)
-    { 
-        sg_ptHead = ptTmp;
+    ptTmp->pNext = sg_ptHead;
+    while((sg_ptHead != ptElm->pNext)&&(ptTmp->iData > ptElm->iData))
+    {
+        ptElm = ptElm->pNext;
+    }
+    if(ptTmp->iData <= ptElm->iData)
+    {
+        if(ptElm == sg_ptHead)
+        {
+            sg_ptHead = ptTmp;
+            ptTmp ->pNext =ptElm;
+        }
+        else if(sg_ptHead != ptElm->pNext)
+        {
+            ptTmp->pNext = ptElm;
+        }
     }
     else
     {
-        while((NULL != ptElm->pNext)&&(ptTmp->iData > ptElm->iData))
-        {
-            ptElm = ptElm->pNext;
-        }
-        if(ptTmp->iData <= ptElm->iData)
-        {
-            if(ptElm == sg_ptHead)
-            {
-                sg_ptHead = ptTmp;
-                ptTmp ->pNext =ptElm;
-            }
-            else if(NULL != ptElm->pNext)
-            {
-                ptTmp->pNext = ptElm;
-            }
-        }
-        else
-        {
-            ptElm->pNext = ptTmp;
-        }
+        ptElm->pNext = ptTmp;
     }
     return ptTmp;
 }
@@ -207,7 +170,10 @@ int main()
 {
     int iTmp;
     LISTNODE_T *ptHead,*ptTmp,*ptNode;
-    sg_ptHead = NULL;
+    /*init a static global circular list */
+    sg_tNode.iData = 0;
+    sg_tNode.pNext =sg_ptHead;
+    sg_ptHead = sg_tNode;
     
     ptNode = AddNodeToTail(1);
 
@@ -235,4 +201,5 @@ int main()
 }
 
 /*End of file*/
+
 

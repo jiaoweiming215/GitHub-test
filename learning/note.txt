@@ -2,3 +2,4 @@
 1.优先检查map文件heap空间分配，如无空间，在keil环境中需要配置.S文件的heap size
   IAR环境中需要在icf文件中配置或者编译器中界面配置heap size。
 2.如工程中包含了自己编写的malloc函数，可能有误，屏蔽此函数，优先选择使用microlib中的malloc和free函数
+
