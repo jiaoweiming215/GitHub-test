@@ -7,3 +7,5 @@ List
 ---
 3.list20180103(Put the head of list in static variable )
 ---
+4.note
+---
