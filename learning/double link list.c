@@ -15,7 +15,7 @@
 typedef struct ListNode
 {
    int iData;
-   struct ListNode *pNext;
+   struct ListNode *pNext,*pPrior;
 }LISTNODE_T;
 
 static LISTNODE_T *sg_ptHead = NULL;
@@ -50,7 +50,9 @@ LISTNODE_T *AddNodeToTail(int iData)
     {
         ptElm = ptElm->pNext;
     }
-    ptElm->pNext = ptTmp;
+    ptTmp->pPrior = ptElm;
+    ptElm->pNext->pPrior = ptTmp;
+    ptElm->pNext-> = ptTmp;
     return ptTmp;
 }
 /********************************************************
@@ -70,21 +72,20 @@ LISTNODE_T *AddNodeToTail(int iData)
 
 int DelNode(int iData)
 {
-    LISTNODE_T *ptTmp,*ptTmp1;
+    LISTNODE_T *ptTmp;
     ptTmp = sg_ptHead->pNext;
     /*del all nodes which value is equal to idata*/
     while(sg_ptHead != ptTmp)
     {
         if(iData == ptTmp->iData)
         {
-            ptTmp1 = ptTmp->pNext;
+            ptTmp->pNext->pPrior = ptTmp->pPrior;
+            ptTmp->pPrior->pNext = ptTmp->pNext;
             free(ptTmp);
-            ptTmp1 = ptTmp;
             continue;
         }
-        ptTmp1 = ptTmp;
         ptTmp = ptTmp->pNext;
-    }
+    }    
     return TRUE;
 }
 /********************************************************
@@ -141,29 +142,6 @@ LISTNODE_T *InsertNode(int iData)
         printf("It's out of memory");
         return NULL;
     }    
-    ptElm = sg_ptHead;
-    ptTmp->iData = iData;
-    ptTmp->pNext = sg_ptHead;
-    while((sg_ptHead != ptElm->pNext)&&(ptTmp->iData > ptElm->iData))
-    {
-        ptElm = ptElm->pNext;
-    }
-    if(ptTmp->iData <= ptElm->iData)
-    {
-        if(ptElm == sg_ptHead)
-        {
-            sg_ptHead = ptTmp;
-            ptTmp ->pNext =ptElm;
-        }
-        else if(sg_ptHead != ptElm->pNext)
-        {
-            ptTmp->pNext = ptElm;
-        }
-    }
-    else
-    {
-        ptElm->pNext = ptTmp;
-    }
     return ptTmp;
 }
 
@@ -173,7 +151,8 @@ int main()
     LISTNODE_T *ptHead,*ptTmp,*ptNode;
     /*init a static global circular list */
     sg_tNode.iData = 0;
-    sg_tNode.pNext =sg_ptHead;
+    sg_tNode.pNext = sg_ptHead;
+    sg_tNode.pPrior = sg_ptHead;
     sg_ptHead = sg_tNode;
     
     ptNode = AddNodeToTail(1);
