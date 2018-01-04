@@ -45,6 +45,12 @@ LISTNODE_T *AddNodeToTail(int iData)
     }
     ptTmp->iData = iData;
     ptTmp->pNext = sg_ptHead;
+    /*the add iData is the first must modify sg_ptHead*/
+    if(sg_ptHead->pNext == sg_ptHead)
+    {
+        sg_ptHead->pNext = ptTmp;
+        return ptTmp;
+    }
     ptElm = sg_ptHead;
     while(sg_ptHead != ptElm->pNext)
     {
@@ -140,30 +146,21 @@ LISTNODE_T *InsertNode(int iData)
     {
         printf("It's out of memory");
         return NULL;
-    }    
+    }
     ptElm = sg_ptHead;
     ptTmp->iData = iData;
-    ptTmp->pNext = sg_ptHead;
+    /*the insert iData is the first must modify sg_ptHead*/
+    if(sg_ptHead->pNext == sg_ptHead)
+    {
+        sg_ptHead->pNext = ptTmp;
+        return ptTmp;
+    }
     while((sg_ptHead != ptElm->pNext)&&(ptTmp->iData > ptElm->iData))
     {
         ptElm = ptElm->pNext;
     }
-    if(ptTmp->iData <= ptElm->iData)
-    {
-        if(ptElm == sg_ptHead)
-        {
-            sg_ptHead = ptTmp;
-            ptTmp ->pNext =ptElm;
-        }
-        else if(sg_ptHead != ptElm->pNext)
-        {
-            ptTmp->pNext = ptElm;
-        }
-    }
-    else
-    {
-        ptElm->pNext = ptTmp;
-    }
+    ptTmp->pNext = ptElm->pNext;
+    ptElm->pNext = ptTmp;
     return ptTmp;
 }
 
