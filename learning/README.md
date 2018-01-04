@@ -3,15 +3,15 @@
 ====
 笔记--note
 ---
-单循环链表--circular linked list.c
+单循环链表--CircularLinkedList.c
 ---
-双循环链表--double link list.c
+双循环链表--DoubleLinkList.c
 ---
-单链表(使用静态全局变量维护链表)--list20180103.c
+单链表(使用静态全局变量维护链表)--ListApp1.c
 ---
-单链表--list20171230.c
+单链表--ListApp.c
 ---
-静态链表--list201071229.c
+静态链表--StaticList.c
 ---
 
 
