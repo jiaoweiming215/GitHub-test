@@ -1,13 +1,19 @@
 
 List
 ====
-1.list201071229
+note
 ---
-2.list20171230
+circular linked list
 ---
-3.list20180103(Put the head of list in static variable )
+double link list
 ---
-4.note
+list20180103(Put the head of list in static variable )
 ---
+list201071229
+---
+list20171230
+---
+
+
 
 
