@@ -1,18 +1,19 @@
 
-List
+清单--List
 ====
-note
+笔记--note
 ---
-circular linked list
+单循环链表--circular linked list.c
 ---
-double link list
+双循环链表--double link list.c
 ---
-list20180103(Put the head of list in static variable )
+单链表(使用静态全局变量维护链表)--list20180103.c
 ---
-list201071229
+单链表--list20171230.c
 ---
-list20171230
+静态链表--list201071229.c
 ---
+
 
 
 
