@@ -21,7 +21,7 @@ typedef struct ListNode
 }LISTNODE_T;
 
 static  LISTNODE_T *sg_ptHead = NULL;
-static unsigned int sg_u32OldTm  = 0;
+static unsigned int sg_u32OldTm = 0;
 static LISTNODE_T sg_tNode;/*The node can't be deleted*/
 
 #define LEN sizeof(LISTNODE_T)
@@ -48,6 +48,7 @@ LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut)
         return NULL;
     }
     ptTmp->iTmId = iTmId;
+    ptTmp->iOldTm = sg_u32OldTm;
     ptTmp->iTmOut = iTmOut;
     ptTmp->pNext = sg_ptHead;
     /*the add iData is the first must modify sg_ptHead*/
@@ -154,6 +155,7 @@ LISTNODE_T *InsertNode(int iTmId,int iTmOut)
     }
     ptElm = sg_ptHead;
     ptTmp->iTmId = iTmId;
+    ptTmp->iOldTm = sg_u32OldTm;
     ptTmp->iTmOut = iTmOut;
     /*the insert iData is the first must modify sg_ptHead*/
     if(sg_ptHead->pNext == sg_ptHead)
@@ -205,7 +207,11 @@ int main()
     {
         while(sg_ptHead != ptTmp->pNext)
         {
-            if(ptTmp->iTmOut)
+            if(ptTmp->iTmOut > sg_u32OldTm - ptTmp->iOldTm)
+            {
+                printf("%d\n",ptTmp->iTmId);
+            }
+            ptTmp = ptTmp->pNext;
         }
     }
     return TRUE;
