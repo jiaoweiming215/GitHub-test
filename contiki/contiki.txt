@@ -1,0 +1,28 @@
+    contiki是由瑞典计算机科学研究所开发专用的网络节点操作系统，成为一个完整的操作系统，包括
+    Coffee、网络协议栈UIP和Rime、网络仿真器COOJA。由标准C语言开发，具有很强的移植性。contiki将Protothreads
+    轻量级线程模型和事件机制完美整合到一起，Prototheads机制使系统占用内存极小，事件机制保证了系统低功耗，
+    非常适合资源受限，功耗敏感的传感器网络。
+        嵌入式系统可以看做是一个运行着的死循环主函数系统，contiki内核是基于事件驱动型的，系统运行可以视为不断处理
+    事件额过程，contiki整个运行时通过事件触发完成，一个事件绑定相应的进程，当事件触发，系统把执行权交给事件所绑定
+    的进程。
+        protothead用一个两字节静态变量存储被中断的行，因为静态变量不从栈上分配空间，所以即使有任务也不会影响到该变量
+    从而达到保存断电的目的，下一次该进程获得执行权的时候，进入函数体后就通过switch语句跳转到上一次被中断的地方。
+    1.保存断点
+        保存断电时通过保存行数来完成的，在被中断的地方插入编译器关键字__LINE__,编译器便自动记录所中断的行数。展开那些具有
+    中断功能的宏，可以发现最后保存行数是宏LC_SET,取宏PROCESS_WAIT_EVENT()为例，将其展开得到如下代码：
+    #define PROCESS_WAIT_EVENT() PROCESS_YIELD()
+    #define PROCESS_YIELD() PT_YIELD(process_pt)
+    #difine PT_YIELD(pt)\
+    do{
+		    PT_YIELD_FLAG = 0;
+		    LC_SET((pt)->lc);
+		    if(PT_YIELD_FLAG == 0)
+		    {
+		        return PT_YIELDED
+		    }
+    }while(0)
+    
+    #define LC_SET(s)s=__LINE__;case__LINE__://保存程序断点，下次在运行该进程之间跳到case__LINE__
+    
+        值得一提的是，宏LC_SET展开还包含语句case__LINE__，用于下次恢复断点，即下次通过switch语句就
+    可以跳转到case的下一句。
