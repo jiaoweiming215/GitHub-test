@@ -1,5 +1,5 @@
 /*****************************************************************************
-* File       : ListApp.c
+* File       : TimList.c
 * Function   : The listapp can add node,delete node, search node and insert node
 * Description: To be done.           
 * Version    : V0.10
@@ -17,11 +17,12 @@ typedef struct ListNode
    int iTmId;
    int iOldTm;
    int iTmOut;
+   int iCnt;
    struct ListNode *pNext;
 }LISTNODE_T;
 
 static  LISTNODE_T *sg_ptHead = NULL;
-static unsigned int sg_u32OldTm = 0;
+static unsigned int sg_u32SysTm = 0;
 static LISTNODE_T sg_tNode;/*The node can't be deleted*/
 
 #define LEN sizeof(LISTNODE_T)
@@ -49,7 +50,7 @@ LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut)
         return NULL;
     }
     ptTmp->iTmId = iTmId;
-    ptTmp->iOldTm = sg_u32OldTm;
+    ptTmp->iOldTm = sg_u32SysTm;
     ptTmp->iTmOut = iTmOut;
     ptTmp->pNext = sg_ptHead;
     /*the add iData is the first must modify sg_ptHead*/
@@ -156,7 +157,7 @@ LISTNODE_T *InsertNode(int iTmId,int iTmOut)
     }
     ptElm = sg_ptHead;
     ptTmp->iTmId = iTmId;
-    ptTmp->iOldTm = sg_u32OldTm;
+    ptTmp->iOldTm = sg_u32SysTm;
     ptTmp->iTmOut = iTmOut;
     /*the insert iData is the first must modify sg_ptHead*/
     if(sg_ptHead->pNext == sg_ptHead)
@@ -208,9 +209,10 @@ int main()
     {
         while(sg_ptHead != ptTmp->pNext)
         {
-            if(ptTmp->iTmOut > sg_u32OldTm - ptTmp->iOldTm)
+            if(ptTmp->iTmOut > sg_u32SysTm - ptTmp->iOldTm)
             {
-                printf("%d\n",ptTmp->iTmId);
+               ptTmp->iOldTm = sg_u32SysTm;
+               printf("%d\n",ptTmp->iTmId);
             }
             ptTmp = ptTmp->pNext;
         }
