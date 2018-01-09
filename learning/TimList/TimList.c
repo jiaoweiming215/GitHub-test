@@ -1,36 +1,26 @@
 /*****************************************************************************
 * File       : TimList.c
-* Function   : The listapp can add node,delete node, search node and insert node
+* Function   : Provide time services
 * Description: To be done.           
-* Version    : V0.10
+* Version    : V0.20
 * Author     : JOE
-* Date       : 8th Jan 2018
+* Date       : 10th Jan 2018
 * History    :  No.  When           Who           What
-*               1    8/Jan/2018     JOE           Create
+*               1    10/Jan/2018     JOE           Create
 
  ******************************************************************************/
-#define TRUE 1
-#define FALSE 0
-
-typedef struct ListNode
-{
-   int iTmId;
-   int iOldTm;
-   int iTmOut;
-   int iCnt;
-   struct ListNode *pNext;
-}LISTNODE_T;
+#include "TimList.h"
 
 static  LISTNODE_T *sg_ptHead = NULL;
 static unsigned int sg_u32SysTm = 0;
 static LISTNODE_T sg_tNode;/*The node can't be deleted*/
 
-#define LEN sizeof(LISTNODE_T)
 /********************************************************
 * Name       : LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut)
 * Function   :Add node to tail
 * Input      : int iTmId 1~2^32  the tmr ID
                int iTmOut 1~2^32 timing interval
+               unsigned int iCnt 0~2^32 timer times
 
 * Output:    : sg_ptHead The head of the list 0x00000000~0xffffffff   
 * Return     : NULL   Failed operation
@@ -40,7 +30,7 @@ static LISTNODE_T sg_tNode;/*The node can't be deleted*/
 * Author     : JOE
 * Date       : 2nd Jan 2018
 *********************************************************/
-LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut)
+LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut,unsigned int iCnt)
 {
     LISTNODE_T *ptTmp,*ptElm;
     ptTmp = (LISTNODE_T *)malloc(LEN);
@@ -52,6 +42,7 @@ LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut)
     ptTmp->iTmId = iTmId;
     ptTmp->iOldTm = sg_u32SysTm;
     ptTmp->iTmOut = iTmOut;
+    ptTmp->iCnt = iCnt;
     ptTmp->pNext = sg_ptHead;
     /*the add iData is the first must modify sg_ptHead*/
     if(sg_ptHead->pNext == sg_ptHead)
@@ -102,7 +93,7 @@ int DelNode(int iTmId)
     return TRUE;
 }
 /********************************************************
-* Name       : int GetElem(LISTNODE_T **pHead,int iTmId)
+* Name       : int GetElem(LISTNODE_T **pHead,int iTmId,int iCnt)
 * Function   : find node from list
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
                int iTmId 1~2^32   the tmr ID
@@ -146,7 +137,7 @@ int GetElem(LISTNODE_T **pHead,int iTmId)
 * Author     : JOE
 * Date       : 2nd Jan 2018
 *********************************************************/
-LISTNODE_T *InsertNode(int iTmId,int iTmOut)
+LISTNODE_T *InsertNode(int iTmId,int iTmOut,unsigned int iCnt)
 {
     LISTNODE_T *ptElm,*ptTmp;
     ptTmp = (LISTNODE_T *)malloc(LEN);
@@ -158,6 +149,7 @@ LISTNODE_T *InsertNode(int iTmId,int iTmOut)
     ptElm = sg_ptHead;
     ptTmp->iTmId = iTmId;
     ptTmp->iOldTm = sg_u32SysTm;
+    ptTmp->iCnt = iCnt;
     ptTmp->iTmOut = iTmOut;
     /*the insert iData is the first must modify sg_ptHead*/
     if(sg_ptHead->pNext == sg_ptHead)
@@ -183,7 +175,7 @@ int main()
     sg_tNode.pNext =sg_ptHead;
     sg_ptHead = sg_tNode;
     sg_u32OldTm = 0;
-    ptNode = AddNodeToTail(1,10);
+    ptNode = AddNodeToTail(1,10,0xaa);
 
     ptTmp = sg_ptHead;
     while(NULL != ptTmp)
@@ -191,8 +183,8 @@ int main()
         printf("%d\n",ptTmp->iTmId);
         ptTmp = ptTmp->pNext;
     }
-    ptNode = AddNodeToTail(2,20);
-    ptNode = AddNodeToTail(3,30);
+    ptNode = AddNodeToTail(2,20,1);
+    ptNode = AddNodeToTail(3,30,2);
     ptTmp = sg_ptHead;
     while(NULL != ptTmp)
     {
@@ -201,7 +193,7 @@ int main()
     }
     GetElem(2);
     GetElem(5);
-    ptNode = InsertNode(5,50);
+    ptNode = InsertNode(5,50,3);
     GetElem(5);
     iTmp = DelNode(5);
     GetElem(5);
@@ -209,10 +201,22 @@ int main()
     {
         while(sg_ptHead != ptTmp->pNext)
         {
-            if(ptTmp->iTmOut > sg_u32SysTm - ptTmp->iOldTm)
+            if(0xAA == ptTmp->iCnt)
             {
-               ptTmp->iOldTm = sg_u32SysTm;
-               printf("%d\n",ptTmp->iTmId);
+                if(ptTmp->iTmOut > sg_u32SysTm - ptTmp->iOldTm)
+                {
+                   ptTmp->iOldTm = sg_u32SysTm;
+                   printf("%d\n",ptTmp->iTmId);
+                }
+            }
+            else
+            {
+                if(ptTmp->iTmOut > sg_u32SysTm - ptTmp->iOldTm)
+                {
+                   ptTmp->iOldTm = sg_u32SysTm;
+                   ptTmp->iCnt--;
+                   printf("%d\n",ptTmp->iTmId);
+                }
             }
             ptTmp = ptTmp->pNext;
         }
