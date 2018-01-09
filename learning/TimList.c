@@ -28,7 +28,8 @@ static LISTNODE_T sg_tNode;/*The node can't be deleted*/
 /********************************************************
 * Name       : LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut)
 * Function   :Add node to tail
-* Input      : int iData 1~255   Data for add
+* Input      : int iTmId 1~2^32  the tmr ID
+               int iTmOut 1~2^32 timing interval
 
 * Output:    : sg_ptHead The head of the list 0x00000000~0xffffffff   
 * Return     : NULL   Failed operation
@@ -69,7 +70,7 @@ LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut)
 * Name       : int DelNode(int iTmId)
 * Function   : Delete a node from list which value is equal to idata 
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-                   int iTmId 1~2^32   Data for add
+               int iTmId 1~2^32   the tmr ID
 
 * Output:    : sg_ptHead The head of the list 0x00000000~0xffffffff   
 * Return     :  FALSE Node del fail
@@ -100,10 +101,10 @@ int DelNode(int iTmId)
     return TRUE;
 }
 /********************************************************
-* Name       : int GetElem(int iTmId)
+* Name       : int GetElem(LISTNODE_T **pHead,int iTmId)
 * Function   : find node from list
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-                   int iData 1~255   Data for add
+               int iTmId 1~2^32   the tmr ID
 
 * Output:    : None
 * Return     : FALSE   Failed operation
@@ -133,7 +134,7 @@ int GetElem(LISTNODE_T **pHead,int iTmId)
 * Name       : LISTNODE_T *InsertNode(int iTmId)
 * Function   : Insert node to list,put the big  behind small
 * Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-                   int iData 1~255   Data for add
+               int iTmId 1~2^32 the tmr ID
 
 * Output:    : sg_ptHead The head of the list 0x00000000~0xffffffff   
 * Return     : NULL   Failed operation
