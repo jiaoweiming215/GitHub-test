@@ -30,7 +30,7 @@ static LISTNODE_T sg_tNode;/*The node can't be deleted*/
 * Author     : JOE
 * Date       : 2nd Jan 2018
 *********************************************************/
-LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut,unsigned int iCnt)
+LISTNODE_T *AddNodeToTail(TIMER* timer)
 {
     LISTNODE_T *ptTmp,*ptElm;
     ptTmp = (LISTNODE_T *)malloc(LEN);
@@ -39,11 +39,12 @@ LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut,unsigned int iCnt)
         printf("It's out of memory");
         return NULL;
     }
-    ptTmp->iTmId = iTmId;
-    ptTmp->iOldTm = sg_u32SysTm;
-    ptTmp->iTmOut = iTmOut;
-    ptTmp->iCnt = iCnt;
-    ptTmp->pNext = sg_ptHead;
+    ptTmp->tTimer.iTmId = timer->iTmId;
+    ptTmp->tTimer.iOldTm = sg_u32SysTm;
+    ptTmp->tTimer.iTmOut = timer->iTmOut;
+    ptTmp->tTimer.iCnt = timer->iCnt;
+    ptTmp->tTimer.pTmCallback = timer->pTmCallback;
+    ptTmp->tTimer.pNext = sg_ptHead;
     /*the add iData is the first must modify sg_ptHead*/
     if(sg_ptHead->pNext == sg_ptHead)
     {
@@ -80,7 +81,7 @@ int DelNode(int iTmId)
     /*del all nodes which value is equal to idata*/
     while(sg_ptHead != ptTmp)
     {
-        if(iTmId == ptTmp->iTmId)
+        if(iTmId == ptTmp->tTimer.iTmId)
         {
             ptTmp1 = ptTmp->pNext;
             free(ptTmp);
@@ -112,7 +113,7 @@ int GetElem(LISTNODE_T **pHead,int iTmId)
     ptElm = sg_ptHead->pNext;
     while(sg_ptHead != ptElm)
     {
-        if(iTmId == ptElm->iTmId)
+        if(iTmId == ptElm->tTimer.iTmId)
         {
             printf("%d is in the list",iTmId);
             return TRUE;
@@ -147,17 +148,17 @@ LISTNODE_T *InsertNode(int iTmId,int iTmOut,unsigned int iCnt)
         return NULL;
     }
     ptElm = sg_ptHead;
-    ptTmp->iTmId = iTmId;
-    ptTmp->iOldTm = sg_u32SysTm;
-    ptTmp->iCnt = iCnt;
-    ptTmp->iTmOut = iTmOut;
+    ptTmp->tTimer.iTmId = iTmId;
+    ptTmp->tTimer.iOldTm = sg_u32SysTm;
+    ptTmp->tTimer.iCnt = iCnt;
+    ptTmp->tTimer.iTmOut = iTmOut;
     /*the insert iData is the first must modify sg_ptHead*/
     if(sg_ptHead->pNext == sg_ptHead)
     {
         sg_ptHead->pNext = ptTmp;
         return ptTmp;
     }
-    while((sg_ptHead != ptElm->pNext)&&(ptTmp->iTmId > ptElm->iTmId))
+    while((sg_ptHead != ptElm->pNext)&&(ptTmp->tTimer.iTmId > ptElm->tTimer.iTmId))
     {
         ptElm = ptElm->pNext;
     }
@@ -166,16 +167,48 @@ LISTNODE_T *InsertNode(int iTmId,int iTmOut,unsigned int iCnt)
     return ptTmp;
 }
 
+/********************************************************
+* Name       : void print()
+* Function   : print task
+* Input      : int iCnt 1~2^32 the tmr ID
+
+* Output:    : NULL
+* Return     : NULL   
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 15th Jan 2018
+*********************************************************/
+void print()
+{
+    printf("task1\n");
+}
+
+void print1()
+{
+    printf("task2\n");
+}
+void print2()
+{
+    printf("task3\n");
+}
+
 int main()
 {
     int iTmp;
     LISTNODE_T *ptHead,*ptTmp,*ptNode;
+    TIMER tTimer;
     /*init a static global circular list */
-    sg_tNode.iData = 0;
+    sg_tNode.tTimer.iData = 0;
     sg_tNode.pNext =sg_ptHead;
     sg_ptHead = sg_tNode;
-    sg_u32OldTm = 0;
-    ptNode = AddNodeToTail(1,10,0xaa);
+    sg_tNode.tTimer.pTmCallback = NULL;
+    sg_u32SysTm = 0;
+    tTimer.iTmId = 1;
+    tTimer.iTmOut= 10;
+    tTimer.iCnt= 0xaa;
+    tTimer.pTmCallback = print;
+    ptNode = AddNodeToTail(&tTimer);
 
     ptTmp = sg_ptHead;
     while(NULL != ptTmp)
@@ -183,8 +216,16 @@ int main()
         printf("%d\n",ptTmp->iTmId);
         ptTmp = ptTmp->pNext;
     }
-    ptNode = AddNodeToTail(2,20,1);
-    ptNode = AddNodeToTail(3,30,2);
+    tTimer.iTmId = 2;
+    tTimer.iTmOut= 20;
+    tTimer.iCnt= 0x01;
+    tTimer.pTmCallback = print1;
+    ptNode = AddNodeToTail(&tTimer);
+    tTimer.iTmId = 3;
+    tTimer.iTmOut= 30;
+    tTimer.iCnt= 0x02;
+    tTimer.pTmCallback = print2;
+    ptNode = AddNodeToTail(&tTimer);
     ptTmp = sg_ptHead;
     while(NULL != ptTmp)
     {
@@ -201,21 +242,21 @@ int main()
     {
         while(sg_ptHead != ptTmp->pNext)
         {
-            if(0xAA == ptTmp->iCnt)
+            if(0xAA == ptTmp->tTimer.iCnt)
             {
-                if(ptTmp->iTmOut > sg_u32SysTm - ptTmp->iOldTm)
+                if(ptTmp->tTimer.iTmOut > sg_u32SysTm - ptTmp->tTimer.iOldTm)
                 {
                    ptTmp->iOldTm = sg_u32SysTm;
-                   printf("%d\n",ptTmp->iTmId);
+                   ptTmp->tTimer.pTmCallback();
                 }
             }
             else
             {
-                if(ptTmp->iTmOut > sg_u32SysTm - ptTmp->iOldTm)
+                if(ptTmp->tTimer.iTmOut > sg_u32SysTm - ptTmp->tTimer.iOldTm)
                 {
-                   ptTmp->iOldTm = sg_u32SysTm;
-                   ptTmp->iCnt--;
-                   printf("%d\n",ptTmp->iTmId);
+                   ptTmp->tTimer.iOldTm = sg_u32SysTm;
+                   ptTmp->tTimer.iCnt--;
+                   ptTmp->tTimer.pTmCallback();
                 }
             }
             ptTmp = ptTmp->pNext;

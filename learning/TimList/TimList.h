@@ -21,17 +21,23 @@
 #define FALSE 0
 #define LEN sizeof(LISTNODE_T)
 
-typedef void (*pTmCB)(void);
+typedef void (*PTMCB)(void);
 
 typedef struct ListNode
 {
    struct ListNode *pNext;
-   pTmCB pTmCallback;
+   TIMER tTimer;
+}LISTNODE_T;
+
+typedef struct Timer
+{
+   PTMCB pTmCallback;
    int iTmId;
    int iOldTm;
    int iTmOut;
    int iCnt;
-}LISTNODE_T;
+}TIMER;
+
 
  
 #ifdef __cplusplus
