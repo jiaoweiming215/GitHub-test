@@ -16,12 +16,12 @@
     extern "C" {
 #endif
 
-
-#define TRUE 1
-#define FALSE 0
+#define NULL (0)
+#define TRUE (1)
+#define FALSE (0)
 #define LEN sizeof(LISTNODE_T)
 
-typedef void (*PTMCB)(void);
+typedef void (*PTMCB)(void *pPara);
 
 typedef struct ListNode
 {
@@ -31,11 +31,12 @@ typedef struct ListNode
 
 typedef struct Timer
 {
-   PTMCB pTmCallback;
-   int iTmId;
-   int iOldTm;
-   int iTmOut;
-   int iCnt;
+   PTMCB pTmCallback;    /* Callback when time is up */
+   void *pPara;          /* Parameters for callback  */
+   int iTmId;            /* Timeout event task ID    */
+   int iOldTm;           /* Start time point         */
+   int iTmOut;           /* Timeout time             */
+   int iCnt;             /* Count to start the timer */
 }TIMER;
 
 

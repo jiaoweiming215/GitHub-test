@@ -16,11 +16,9 @@ static unsigned int sg_u32SysTm = 0;
 static LISTNODE_T sg_tNode;/*The node can't be deleted*/
 
 /********************************************************
-* Name       : LISTNODE_T *AddNodeToTail(int iTmId,int iTmOut)
+* Name       : LISTNODE_T *AddNodeToTail(TIMER* timer)
 * Function   :Add node to tail
-* Input      : int iTmId 1~2^32  the tmr ID
-               int iTmOut 1~2^32 timing interval
-               unsigned int iCnt 0~2^32 timer times
+* Input      : TIMER* timer Pointer of timers set by user.
 
 * Output:    : sg_ptHead The head of the list 0x00000000~0xffffffff   
 * Return     : NULL   Failed operation
@@ -179,16 +177,18 @@ LISTNODE_T *InsertNode(int iTmId,int iTmOut,unsigned int iCnt)
 * Author     : JOE
 * Date       : 15th Jan 2018
 *********************************************************/
-void print()
+void print(void *pare)
 {
+    int a;
+    a = (int)*pare;
     printf("task1\n");
 }
 
-void print1()
+void print1(void *pare)
 {
     printf("task2\n");
 }
-void print2()
+void print2(void *pare)
 {
     printf("task3\n");
 }
@@ -240,24 +240,23 @@ int main()
     GetElem(5);
     while(1)
     {
+        ptTmp = sg_ptHead;
         while(sg_ptHead != ptTmp->pNext)
         {
-            if(0xAA == ptTmp->tTimer.iCnt)
+            if(NULL != ptTmp->tTimer.iCnt)
             {
                 if(ptTmp->tTimer.iTmOut > sg_u32SysTm - ptTmp->tTimer.iOldTm)
                 {
-                   ptTmp->iOldTm = sg_u32SysTm;
-                   ptTmp->tTimer.pTmCallback();
+                    ptTmp->iOldTm = sg_u32SysTm;
+                    if(NULL != ptTmp->tTimer.pTmCallback)
+                    {
+                        ptTmp->tTimer.pTmCallback();
+                    }
                 }
             }
-            else
+            if(0xAA != ptTmp->tTimer.iCnt)
             {
-                if(ptTmp->tTimer.iTmOut > sg_u32SysTm - ptTmp->tTimer.iOldTm)
-                {
-                   ptTmp->tTimer.iOldTm = sg_u32SysTm;
-                   ptTmp->tTimer.iCnt--;
-                   ptTmp->tTimer.pTmCallback();
-                }
+                ptTmp->tTimer.iCnt--;
             }
             ptTmp = ptTmp->pNext;
         }
