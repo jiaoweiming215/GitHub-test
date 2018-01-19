@@ -19,22 +19,124 @@
 #define NULL (0)
 #define TRUE (1)
 #define FALSE (0)
-#define MAXQSIZE 10
-#define LENGTH sizeof(QUEUE_T)
+#define MAXQSIZE (10)
+#define LENGTH (sizeof(T_QUEUE))
 typedef struct Queue
 {
    int *piBase;
    int front;
    int rear;
-}QUEUE_T;
+}T_QUEUE;
 
-void initQueue(QUEUE_T *pQueue);
-void freeQueue(QUEUE_T *pQueue);
-void inQueue(QUEUE_T *pQueue);
-void outQueue(QUEUE_T *pQueue);
-bool isEmptyQueue(QUEUE_T *pQueue);
-bool isFullQueue(QUEUE_T *pQueue);
-int LengthQueue(QUEUE_T *pQueue);
+/********************************************************
+* Name       : int initQueue(T_QUEUE *ptQueue)
+* Function   :init the queue
+* Input      : T_QUEUE *ptQueue :the point of queue struct 
+
+* Output:    : 
+* Return     : TRUE:queue init sucess
+                   FALSE:queue init failed
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 17th Jan 2018
+*********************************************************/
+int initQueue(T_QUEUE *ptQueue);
+/********************************************************
+* Name       :void freeQueue(T_QUEUE *ptQueue)
+* Function   :free the queue
+* Input      : T_QUEUE *ptQueue :the point of queue struct
+
+* Output:    : 
+* Return     : 
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 17th Jan 2018
+*********************************************************/
+void freeQueue(T_QUEUE *ptQueue);
+/********************************************************
+* Name       :int inQueue(T_QUEUE *ptQueue,int iValue)
+* Function   :init the queue
+* Input      : T_QUEUE *ptQueue :the point of queue struct
+                  int iValue:the data of insert the queue
+* Output:    : NULL
+* Return     : TRUE:Sucess operation
+                    FALSE:Failed operation
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 17th Jan 2018
+*********************************************************/
+int inQueue(T_QUEUE *ptQueue,int iValue);
+/********************************************************
+* Name       : int outQueue(T_QUEUE *ptQueue,int *iValue)
+* Function   :
+* Input      : T_QUEUE *ptQueue :the point of queue struct
+                  int *iValue:the point of the data for get out
+* Output:    : NULL
+* Return     : TRUE:Sucess operation
+                    FALSE:Failed operation
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 17th Jan 2018
+*********************************************************/
+int outQueue(T_QUEUE *ptQueue,int *iValue);
+/********************************************************
+* Name       :bool isEmptyQueue(T_QUEUE *ptQueue)
+* Function   :judge the queue is empty
+* Input      : T_QUEUE *ptQueue :the point of queue struct
+
+* Output:    : TRUE:Sucess operation
+                    FALSE:Failed operation
+* Return     : 
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 17th Jan 2018
+*********************************************************/
+bool isEmptyQueue(T_QUEUE *ptQueue);
+/********************************************************
+* Name       :bool isFullQueue(T_QUEUE *ptQueue)
+* Function   :judge the queue is full
+* Input      : T_QUEUE *ptQueue :the point of queue struct
+
+* Output:    : 
+* Return     : TRUE:Sucess operation
+                    FALSE:Failed operation
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 17th Jan 2018
+*********************************************************/
+bool isFullQueue(T_QUEUE *ptQueue);
+/********************************************************
+* Name       :int LengthQueue(T_QUEUE *ptQueue)
+* Function   :get the quene length
+* Input      : QUEUE_T *ptQueue 0X00000000~0XFFFFFFFF
+
+* Output:    : 
+* Return     : 
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 17th Jan 2018
+*********************************************************/
+int LengthQueue(T_QUEUE *ptQueue);
+/********************************************************
+* Name       :void TestQuene(void)
+* Function   :test the quene function
+* Input      : NULL
+* Output:    : NULL
+* Return     : NULL
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 20th Jan 2018
+*********************************************************/
+void TestQuene(void);
+
 #ifdef __cplusplus
 }
 #endif

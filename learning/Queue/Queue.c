@@ -1,44 +1,45 @@
 /*****************************************************************************
 * File       : queue.c
-* Function   : Provide time services
+* Function   : Provide queue function
 * Description: To be done.           
 * Version    : V0.20
 * Author     : JOE
 * Date       : 17th Jan 2018
 * History    :  No.  When           Who           What
-*               1    17/Jan/2018     JOE           Create
+*               1    20/Jan/2018     JOE           Create
 
  ******************************************************************************/
 #include "queue.h"
 
-
 /********************************************************
-* Name       : void initQueue(QUEUE_T *pQueue)
+* Name       : int initQueue(T_QUEUE *ptQueue)
 * Function   :init the queue
-* Input      : QUEUE_T *pQueue 
+* Input      : T_QUEUE *ptQueue :the point of queue struct 
 
 * Output:    : 
-* Return     : 
+* Return     : TRUE:queue init sucess
+                   FALSE:queue init failed
 * Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-void initQueue(QUEUE_T *pQueue)
+int initQueue(T_QUEUE *ptQueue)
 {
-    pQueue->piBase = (QUEUE_T *)malloc(LENGTH);
-    if(NULL == pQueue->piBase)
+    ptQueue->piBase = (T_QUEUE *)malloc(LENGTH);
+    if(NULL == ptQueue->piBase)
     {
         print("NO MEMORY!\n");
+        return FALSE;
     }
-    pQueue->front = NULL;
-    pQueue->rear= NULL;
-    return;
+    ptQueue->front = NULL;
+    ptQueue->rear= NULL;
+    return TRUE;
 }
 /********************************************************
-* Name       :void freeQueue(QUEUE_T *pQueue)
-* Function   :init the queue
-* Input      : QUEUE_T *pQueue 
+* Name       :void freeQueue(T_QUEUE *ptQueue)
+* Function   :free the queue
+* Input      : T_QUEUE *ptQueue :the point of queue struct
 
 * Output:    : 
 * Return     : 
@@ -47,31 +48,38 @@ void initQueue(QUEUE_T *pQueue)
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-void freeQueue(QUEUE_T *pQueue)
+void freeQueue(T_QUEUE *ptQueue)
 {
+    if(ptQueue->piBase)
+    {
+        free(ptQueue->piBase);
+    }
+    ptQueue->piBase = NULL;
+    ptQueue->front = NULL;
+    ptQueue->rear = NULL;
     return ;
 }
 /********************************************************
-* Name       :int inQueue(QUEUE_T *pQueue,int iValue)
-* Function   :init the queue
-* Input      : QUEUE_T *pQueue 
-
-* Output:    : 
-* Return     : TRUE Sucess operation
-                    FALSE Failed operation
+* Name       :int inQueue(T_QUEUE *ptQueue,int iValue)
+* Function   :insert data to the queue
+* Input      : T_QUEUE *ptQueue :the point of queue struct
+                  int iValue:the data of insert the queue
+* Output:    : NULL
+* Return     : TRUE:Sucess operation
+                    FALSE:Failed operation
 * Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-int inQueue(QUEUE_T *pQueue,int iValue)
+int inQueue(T_QUEUE *ptQueue,int iValue)
 {
     int iIndex;
     iIndex = isFullQueue(pQueue);
     if(FALSE== iIndex)
     {   
-        pQueue->piBase[pQueue->rear] = iValue;  
-        pQueue->rear = (pQueue->rear+1) % MAXQSIZE;  
+        ptQueue->piBase[ptQueue->rear] = iValue;  
+        ptQueue->rear = (ptQueue->rear+1) % MAXQSIZE;  
         return TRUE; 
     }
     else
@@ -80,48 +88,50 @@ int inQueue(QUEUE_T *pQueue,int iValue)
     }
 }
 /********************************************************
-* Name       : int outQueue(QUEUE_T *pQueue,int *iValue)
-* Function   :
-* Input      : QUEUE_T *pQueue 
-
-* Output:    : 
-* Return     : 
+* Name       : int outQueue(T_QUEUE *ptQueue,int *iValue)
+* Function   : output the data from queue
+* Input      : T_QUEUE *ptQueue :the point of queue struct
+                  int *iValue:the point of the data for get out
+* Output:    : NULL
+* Return     : TRUE:Sucess operation
+                    FALSE:Failed operation
 * Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-int outQueue(QUEUE_T *pQueue,int *iValue)
+int outQueue(T_QUEUE *ptQueue,int *iValue)
 {
     int iIndex;
-    iIndex = isEmptyQueue(pQueue);
+    iIndex = isEmptyQueue(ptQueue);
     if(TRUE == iIndex)
     {
         return FALSE;
     }
     else
     {
-        *iValue = pQueue->piBase[pQueue->front];
-        pQueue->front = (pQueue->front+1)%MAXQSIZE;
+        *iValue = ptQueue->piBase[ptQueue->front];
+        ptQueue->front = (ptQueue->front+1)%MAXQSIZE;
         return TRUE;
     }
 }
 
 /********************************************************
-* Name       :bool isEmptyQueue(QUEUE_T *pQueue)
-* Function   :judge the queue is empty
-* Input      : QUEUE_T *pQueue 
+* Name       :bool isEmptyQueue(T_QUEUE *ptQueue)
+* Function   :judge the queue is empty or not
+* Input      : T_QUEUE *ptQueue :the point of queue struct
 
-* Output:    : 
+* Output:    : TRUE:Sucess operation
+                    FALSE:Failed operation
 * Return     : 
 * Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-bool isEmptyQueue(QUEUE_T *pQueue)
+bool isEmptyQueue(T_QUEUE *ptQueue)
 {
-    if(pQueue->rear== pQueue->front)
+    if(ptQueue->rear== ptQueue->front)
     {
         return TRUE;  
     }
@@ -131,20 +141,21 @@ bool isEmptyQueue(QUEUE_T *pQueue)
     }
 }
 /********************************************************
-* Name       :bool isFullQueue(QUEUE_T *pQueue)
-* Function   :judge the queue is full
-* Input      : QUEUE_T *pQueue 
+* Name       :bool isFullQueue(T_QUEUE *ptQueue)
+* Function   :judge the queue is full or not
+* Input      : T_QUEUE *ptQueue :the point of queue struct
 
 * Output:    : 
-* Return     : 
+* Return     : TRUE:Sucess operation
+                    FALSE:Failed operation
 * Description: To be done
 * Version    : V0.10
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-bool isFullQueue(QUEUE_T *pQueue)
+bool isFullQueue(T_QUEUE *ptQueue)
 {
-    if((pQueue->rear+1)%MAXQSIZE == pQueue->front)
+    if((ptQueue->rear+1)%MAXQSIZE == ptQueue->front)
     {
         return TRUE;  
     }
@@ -154,9 +165,9 @@ bool isFullQueue(QUEUE_T *pQueue)
     }
 }
 /********************************************************
-* Name       :int LengthQueue(QUEUE_T *pQueue)
+* Name       :int LengthQueue(T_QUEUE *ptQueue)
 * Function   :get the quene length
-* Input      : QUEUE_T *pQueue 0X00000000~0XFFFFFFFF
+* Input      : QUEUE_T *ptQueue 0X00000000~0XFFFFFFFF
 
 * Output:    : 
 * Return     : 
@@ -165,22 +176,39 @@ bool isFullQueue(QUEUE_T *pQueue)
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-int LengthQueue(QUEUE_T *pQueue)
+int LengthQueue(T_QUEUE *ptQueue)
 {
-    return ((pQueue->rear-pQueue->front+MAXQSIZE)%MAXQSIZE);
+    return ((ptQueue->rear - ptQueue->front + MAXQSIZE)%MAXQSIZE);
 }
-
-int main()
+/********************************************************
+* Name       :void TestQuene(void)
+* Function   :test the quene function
+* Input      : NULL
+* Output:    : NULL
+* Return     : NULL
+* Description: To be done
+* Version    : V0.10
+* Author     : JOE
+* Date       : 20th Jan 2018
+*********************************************************/
+void TestQuene(void)
 {
     int iValue;
-    QUEUE_T tQueue;
-
+    T_QUEUE tQueue;
     initQueue(&tQueue);
     inQueue(&tQueue,1);
     inQueue(&tQueue,3);
     inQueue(&tQueue,5);
     inQueue(&tQueue,7);
     inQueue(&tQueue,9);
+
+}
+
+int main()
+{
+
+    TestQuene();
+
     return TRUE;
 }
 
