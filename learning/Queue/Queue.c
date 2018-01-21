@@ -12,7 +12,7 @@
 #include "queue.h"
 
 /********************************************************
-* Name       : int initQueue(T_QUEUE *ptQueue)
+* Name       : int InitQueue(T_QUEUE *ptQueue)
 * Function   :init the queue
 * Input      : T_QUEUE *ptQueue :the point of queue struct 
 
@@ -24,7 +24,7 @@
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-int initQueue(T_QUEUE *ptQueue)
+int InitQueue(T_QUEUE *ptQueue)
 {
     ptQueue->piBase = (T_QUEUE *)malloc(LENGTH);
     if(NULL == ptQueue->piBase)
@@ -37,7 +37,7 @@ int initQueue(T_QUEUE *ptQueue)
     return TRUE;
 }
 /********************************************************
-* Name       :void freeQueue(T_QUEUE *ptQueue)
+* Name       :void FreeQueue(T_QUEUE *ptQueue)
 * Function   :free the queue
 * Input      : T_QUEUE *ptQueue :the point of queue struct
 
@@ -48,7 +48,7 @@ int initQueue(T_QUEUE *ptQueue)
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-void freeQueue(T_QUEUE *ptQueue)
+void FreeQueue(T_QUEUE *ptQueue)
 {
     if(ptQueue->piBase)
     {
@@ -195,12 +195,14 @@ void TestQuene(void)
 {
     int iValue;
     T_QUEUE tQueue;
-    initQueue(&tQueue);
+    InitQueue(&tQueue);
     inQueue(&tQueue,1);
     inQueue(&tQueue,3);
     inQueue(&tQueue,5);
     inQueue(&tQueue,7);
     inQueue(&tQueue,9);
+
+    outQueue(&tQueue,)
 
 }
 

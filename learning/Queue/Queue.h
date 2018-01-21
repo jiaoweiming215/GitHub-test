@@ -29,7 +29,7 @@ typedef struct Queue
 }T_QUEUE;
 
 /********************************************************
-* Name       : int initQueue(T_QUEUE *ptQueue)
+* Name       : int InitQueue(T_QUEUE *ptQueue)
 * Function   :init the queue
 * Input      : T_QUEUE *ptQueue :the point of queue struct 
 
@@ -41,7 +41,7 @@ typedef struct Queue
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-int initQueue(T_QUEUE *ptQueue);
+int InitQueue(T_QUEUE *ptQueue);
 /********************************************************
 * Name       :void freeQueue(T_QUEUE *ptQueue)
 * Function   :free the queue
@@ -54,10 +54,10 @@ int initQueue(T_QUEUE *ptQueue);
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-void freeQueue(T_QUEUE *ptQueue);
+void FreeQueue(T_QUEUE *ptQueue);
 /********************************************************
 * Name       :int inQueue(T_QUEUE *ptQueue,int iValue)
-* Function   :init the queue
+* Function   :add data to the queue
 * Input      : T_QUEUE *ptQueue :the point of queue struct
                   int iValue:the data of insert the queue
 * Output:    : NULL
@@ -68,7 +68,7 @@ void freeQueue(T_QUEUE *ptQueue);
 * Author     : JOE
 * Date       : 17th Jan 2018
 *********************************************************/
-int inQueue(T_QUEUE *ptQueue,int iValue);
+int insertQueue(T_QUEUE *ptQueue,int iValue);
 /********************************************************
 * Name       : int outQueue(T_QUEUE *ptQueue,int *iValue)
 * Function   :
