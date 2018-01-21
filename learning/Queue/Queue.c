@@ -75,7 +75,7 @@ void FreeQueue(T_QUEUE *ptQueue)
 int inQueue(T_QUEUE *ptQueue,int iValue)
 {
     int iIndex;
-    iIndex = isFullQueue(pQueue);
+    iIndex = isFullQueue(ptQueue);
     if(FALSE== iIndex)
     {   
         ptQueue->piBase[ptQueue->rear] = iValue;  
@@ -193,16 +193,17 @@ int LengthQueue(T_QUEUE *ptQueue)
 *********************************************************/
 void TestQuene(void)
 {
-    int iValue;
-    T_QUEUE tQueue;
-    InitQueue(&tQueue);
-    inQueue(&tQueue,1);
-    inQueue(&tQueue,3);
-    inQueue(&tQueue,5);
-    inQueue(&tQueue,7);
-    inQueue(&tQueue,9);
-
-    outQueue(&tQueue,)
+    int iValue = 0;
+    static T_QUEUE stQueue;
+    InitQueue(&stQueue);
+    inQueue(&stQueue,1);
+    inQueue(&stQueue,3);
+    inQueue(&stQueue,5);
+    inQueue(&stQueue,7);
+    inQueue(&stQueue,9);
+    
+    outQueue(&stQueue,&iValue);
+    printf("The front is %d\n",iValue);
 
 }
 
