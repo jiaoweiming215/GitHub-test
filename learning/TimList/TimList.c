@@ -116,8 +116,8 @@ int DelNode(int iTmId)
 void print(void *pare)
 {
     int a;
-    a = (int)*pare;
-    printf("task1\n");
+    a = (int*)pare;
+    printf("%d\n",a);
 }
 
 void print1(void *pare)
