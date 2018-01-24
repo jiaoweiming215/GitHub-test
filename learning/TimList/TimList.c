@@ -42,6 +42,15 @@ LISTNODE_T *AddNodeToTail(TIMER* timer)
     ptTmp->tTimer.iTmOut = timer->iTmOut;
     ptTmp->tTimer.iCnt = timer->iCnt;
     ptTmp->tTimer.pTmCallback = timer->pTmCallback;
+    if(NULL == timer->pPara)
+    {
+        ptTmp->tTimer.pPara = (void *)ptTmp;
+    }
+    else
+    {
+        ptTmp->tTimer.pPara = timer->pPara;
+    }
+    
     ptTmp->tTimer.pNext = sg_ptHead;
     /*the add iData is the first must modify sg_ptHead*/
     if(sg_ptHead->pNext == sg_ptHead)
@@ -173,7 +182,7 @@ int main()
                     ptTmp->iOldTm = sg_u32SysTm;
                     if(NULL != ptTmp->tTimer.pTmCallback)
                     {
-                        ptTmp->tTimer.pTmCallback();
+                        ptTmp->tTimer.pTmCallback(ptTmp->tTimer.pPara);
                     }
                 }
             }
