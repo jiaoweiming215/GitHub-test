@@ -91,79 +91,6 @@ int DelNode(int iTmId)
     }
     return TRUE;
 }
-/********************************************************
-* Name       : int GetElem(LISTNODE_T **pHead,int iTmId,int iCnt)
-* Function   : find node from list
-* Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-               int iTmId 1~2^32   the tmr ID
-
-* Output:    : None
-* Return     : FALSE   Failed operation
-*            : TRUE  Sucess operation
-* Description: To be done
-* Version    : V0.10
-* Author     : JOE
-* Date       : 2nd Jan 2018
-*********************************************************/
-int GetElem(LISTNODE_T **pHead,int iTmId)
-{
-    LISTNODE_T *ptElm;
-    ptElm = sg_ptHead->pNext;
-    while(sg_ptHead != ptElm)
-    {
-        if(iTmId == ptElm->tTimer.iTmId)
-        {
-            printf("%d is in the list",iTmId);
-            return TRUE;
-        }
-        ptElm = ptElm->pNext;
-    }
-    printf("%d is not in the list",iTmId);
-    return FALSE;
-}
-/********************************************************
-* Name       : LISTNODE_T *InsertNode(int iTmId)
-* Function   : Insert node to list,put the big  behind small
-* Input      : LISTNODE_T **pHead  0x00000000~0xffffffff    Address of the head node's address;
-               int iTmId 1~2^32 the tmr ID
-
-* Output:    : sg_ptHead The head of the list 0x00000000~0xffffffff   
-* Return     : NULL   Failed operation
-*            : Other  Sucess operation
-*              0x00000004~0xffffffff   Node insert sucess.
-* Description: To be done
-* Version    : V0.10
-* Author     : JOE
-* Date       : 2nd Jan 2018
-*********************************************************/
-LISTNODE_T *InsertNode(int iTmId,int iTmOut,unsigned int iCnt)
-{
-    LISTNODE_T *ptElm,*ptTmp;
-    ptTmp = (LISTNODE_T *)malloc(LEN);
-    if(NULL == ptTmp)
-    {
-        printf("It's out of memory");
-        return NULL;
-    }
-    ptElm = sg_ptHead;
-    ptTmp->tTimer.iTmId = iTmId;
-    ptTmp->tTimer.iOldTm = sg_u32SysTm;
-    ptTmp->tTimer.iCnt = iCnt;
-    ptTmp->tTimer.iTmOut = iTmOut;
-    /*the insert iData is the first must modify sg_ptHead*/
-    if(sg_ptHead->pNext == sg_ptHead)
-    {
-        sg_ptHead->pNext = ptTmp;
-        return ptTmp;
-    }
-    while((sg_ptHead != ptElm->pNext)&&(ptTmp->tTimer.iTmId > ptElm->tTimer.iTmId))
-    {
-        ptElm = ptElm->pNext;
-    }
-    ptTmp->pNext = ptElm->pNext;
-    ptElm->pNext = ptTmp;
-    return ptTmp;
-}
 
 /********************************************************
 * Name       : void print()
@@ -232,12 +159,8 @@ int main()
         printf("%d\n",ptTmp->iTmId);
         ptTmp = ptTmp->pNext;
     }
-    GetElem(2);
-    GetElem(5);
-    ptNode = InsertNode(5,50,3);
-    GetElem(5);
+
     iTmp = DelNode(5);
-    GetElem(5);
     while(1)
     {
         ptTmp = sg_ptHead;
@@ -253,6 +176,10 @@ int main()
                         ptTmp->tTimer.pTmCallback();
                     }
                 }
+            }
+            else
+            {
+                DelNode(ptTmp->tTimer.iTmId);
             }
             if(0xAA != ptTmp->tTimer.iCnt)
             {
