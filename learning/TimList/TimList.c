@@ -113,18 +113,18 @@ int DelNode(int iTmId)
 * Author     : JOE
 * Date       : 15th Jan 2018
 *********************************************************/
-void print(void *pare)
+void print(void *para)
 {
     int a;
-    a = (int*)pare;
+    a = (int*)para;
     printf("%d\n",a);
 }
 
-void print1(void *pare)
+void print1(void *para)
 {
     printf("task2\n");
 }
-void print2(void *pare)
+void print2(void *para)
 {
     printf("task3\n");
 }
