@@ -1,20 +1,21 @@
 
 /************************************************************************************************************
 C文件内嵌汇编 __asm,函数名称需与CPU中异常处理函数名一致。
-保存内核寄存器
+Pendsv_Handler名称必须与异常处理函数名相同，才能映射，实现自动跳转。
+保存内核寄存器通过blockPtr指针间接找到stackptr的值，得到变量指向的stackbuffer的内存单元
 ************************************************************************************************************/
 __asm void Pendsv_Handler(void)
 {
-    IMPORT blockPtr
+    IMPORT blockPtr       ;IMPORT=extern
     
-    LDR R0, =blockPtr
-    LDR R0, [R0]
-    LDR R0, [R0]
+    LDR R0, =blockPtr     ;加载指针变量地址保存到R0
+    LDR R0, [R0]          ;用指针变量地址加载指针变量值
+    LDR R0, [R0]          ;
     
-    STMDB  R0!,{R4-R11}
+    STMDB  R0!,{R4-R11}   ;批量往内存地址里写寄存器，D：递减，B:before,写寄存器之前，先把R0递减，然后再写R4-R11，'!'表示最后一个寄存器值写到R0里。
     
-    LDR R1, =blockPtr
-    LDR R1, [R1]
+    LDR R1, =blockPtr     ;加载指针变量地址到R1
+    LDR R1, [R1]          ;
     STR R0, [R1]
     
     ADD R4,R4,#1
